@@ -1,0 +1,14 @@
+# Aura: GPT-style Programming & DSA Language Model
+# Core Deep Learning & System Dependencies
+
+torch>=2.2.0
+numpy>=1.26.0
+pyyaml>=6.0.1
+
+# Developer & Testing Tools
+pytest>=8.0.0
+pytest-cov>=4.1.0
+pre-commit>=3.6.0
+black>=24.1.0
+ruff>=0.2.0
+mypy>=1.8.0
