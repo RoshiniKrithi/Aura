@@ -69,13 +69,75 @@ class TokenizerConfig:
 
 
 @dataclass(frozen=True)
-class DatasetConfig:
-    """Dataset split and directory configuration."""
+class ValidationConfig:
+    """Dataset validation criteria."""
 
+    min_char_count: int = 10
+    max_non_printable_ratio: float = 0.1
+    check_utf8: bool = True
+    check_duplicates: bool = True
+    max_file_size_mb: float = 1024.0
+
+
+@dataclass(frozen=True)
+class SplitConfig:
+    """Train/Val/Test dataset splitting hyperparameters."""
+
+    train_ratio: float = 0.8
+    val_ratio: float = 0.1
+    test_ratio: float = 0.1
+    seed: int = 42
+    shuffle: bool = True
+
+
+@dataclass(frozen=True)
+class BatchConfig:
+    """DataLoader and mini-batching parameters."""
+
+    batch_size: int = 16
+    drop_last: bool = False
+    pad_token_id: int = 0
+    shuffle: bool = True
+    pin_memory: bool = True
+    num_workers: int = 0
+
+
+@dataclass(frozen=True)
+class SequenceConfig:
+    """Sliding context window sequence generation parameters."""
+
+    window_size: int = 64
+    stride: int = 64
+    add_bos: bool = True
+    add_eos: bool = True
+
+
+@dataclass(frozen=True)
+class CacheConfig:
+    """Dataset disk caching configuration."""
+
+    enabled: bool = True
+    cache_dir: str = "data/cache"
+    compress: bool = False
+
+
+@dataclass(frozen=True)
+class DatasetConfig:
+    """Dataset split, directory, and pipeline configuration."""
+
+    dataset_name: str = "tiny_shakespeare"
     dataset_dir: str = "data"
+    source_type: str = "text"  # "text", "folder", "multi_file", "streaming"
+    file_pattern: str = "*.txt"
+    encoding: str = "utf-8"
     train_split: str = "train"
     val_split: str = "validation"
     test_split: str = "test"
+    validation: ValidationConfig = field(default_factory=ValidationConfig)
+    split: SplitConfig = field(default_factory=SplitConfig)
+    batch: BatchConfig = field(default_factory=BatchConfig)
+    sequence: SequenceConfig = field(default_factory=SequenceConfig)
+    cache: CacheConfig = field(default_factory=CacheConfig)
 
 
 @dataclass(frozen=True)
@@ -107,6 +169,13 @@ class InferenceConfig:
     top_p: float = 0.9
 
 
+from src.attention.config import AttentionConfig
+from src.embeddings.config import EmbeddingConfig
+from src.embeddings.position_config import PositionEmbeddingConfig
+from src.ffn.config import FeedForwardConfig
+from src.normalization.config import LayerNormConfig
+
+
 @dataclass(frozen=True)
 class AppConfig:
     """Root configuration aggregating all Aura system modules."""
@@ -115,6 +184,13 @@ class AppConfig:
     logging: LoggingConfig = field(default_factory=LoggingConfig)
     model: ModelConfig = field(default_factory=ModelConfig)
     tokenizer: TokenizerConfig = field(default_factory=TokenizerConfig)
+    embedding: EmbeddingConfig = field(default_factory=EmbeddingConfig)
+    position_embedding: PositionEmbeddingConfig = field(default_factory=PositionEmbeddingConfig)
+    attention: AttentionConfig = field(default_factory=AttentionConfig)
+    ffn: FeedForwardConfig = field(default_factory=FeedForwardConfig)
+    layernorm: LayerNormConfig = field(default_factory=LayerNormConfig)
     dataset: DatasetConfig = field(default_factory=DatasetConfig)
     training: TrainingConfig = field(default_factory=TrainingConfig)
     inference: InferenceConfig = field(default_factory=InferenceConfig)
+
+

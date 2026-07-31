@@ -66,11 +66,47 @@ class ConfigLoader:
 
         raw_config = cls.load_yaml(file_path)
 
+        from src.utils.config import (
+            BatchConfig,
+            CacheConfig,
+            SequenceConfig,
+            SplitConfig,
+            ValidationConfig,
+        )
+
+        dataset_dict = raw_config.get("dataset", {}).copy()
+        validation_cfg = ValidationConfig(**dataset_dict.pop("validation", {}))
+        split_cfg = SplitConfig(**dataset_dict.pop("split", {}))
+        batch_cfg = BatchConfig(**dataset_dict.pop("batch", {}))
+        sequence_cfg = SequenceConfig(**dataset_dict.pop("sequence", {}))
+        cache_cfg = CacheConfig(**dataset_dict.pop("cache", {}))
+
+        dataset_cfg = DatasetConfig(
+            validation=validation_cfg,
+            split=split_cfg,
+            batch=batch_cfg,
+            sequence=sequence_cfg,
+            cache=cache_cfg,
+            **dataset_dict,
+        )
+
+        from src.attention.config import AttentionConfig
+        from src.embeddings.config import EmbeddingConfig
+        from src.embeddings.position_config import PositionEmbeddingConfig
+        from src.ffn.config import FeedForwardConfig
+        from src.normalization.config import LayerNormConfig
+
         system_cfg = SystemConfig(**raw_config.get("system", {}))
         logging_cfg = LoggingConfig(**raw_config.get("logging", {}))
         model_cfg = ModelConfig(**raw_config.get("model", {}))
         tokenizer_cfg = TokenizerConfig(**raw_config.get("tokenizer", {}))
-        dataset_cfg = DatasetConfig(**raw_config.get("dataset", {}))
+        embedding_cfg = EmbeddingConfig(**raw_config.get("embedding", {}))
+        position_embedding_cfg = PositionEmbeddingConfig(
+            **raw_config.get("position_embedding", {})
+        )
+        attention_cfg = AttentionConfig(**raw_config.get("attention", {}))
+        ffn_cfg = FeedForwardConfig(**raw_config.get("ffn", {}))
+        layernorm_cfg = LayerNormConfig(**raw_config.get("layernorm", {}))
         training_cfg = TrainingConfig(**raw_config.get("training", {}))
         inference_cfg = InferenceConfig(**raw_config.get("inference", {}))
 
@@ -79,6 +115,11 @@ class ConfigLoader:
             logging=logging_cfg,
             model=model_cfg,
             tokenizer=tokenizer_cfg,
+            embedding=embedding_cfg,
+            position_embedding=position_embedding_cfg,
+            attention=attention_cfg,
+            ffn=ffn_cfg,
+            layernorm=layernorm_cfg,
             dataset=dataset_cfg,
             training=training_cfg,
             inference=inference_cfg,

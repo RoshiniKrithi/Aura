@@ -30,11 +30,91 @@ tokenizer:
     bos_token: "<|startoftext|>"
     eos_token: "<|endoftext|>"
 
+embedding:
+  vocab_size: 50257
+  d_model: 768
+  initializer: "normal"  # Choices: "normal", "uniform", "xavier_uniform", "xavier_normal", "kaiming_uniform", "truncated_normal"
+  init_range: 0.02
+  init_std: 0.02
+  scale_by_sqrt_d_model: false
+  pad_idx: null
+  device: "auto"
+
+position_embedding:
+  max_sequence_length: 1024
+  d_model: 768
+  embedding_type: "learnable"  # Choices: "learnable", "sinusoidal"
+  initializer: "normal"
+  init_range: 0.02
+  init_std: 0.02
+  dropout: 0.1
+  device: "auto"
+
+attention:
+  d_model: 768
+  n_heads: 12
+  d_attn: 768
+  dropout: 0.1
+  causal: true
+  bias: true
+  device: "auto"
+
+ffn:
+  d_model: 768
+  expansion_factor: 4
+  d_ff: null
+  activation: "gelu"  # Choices: "gelu", "relu", "silu", "swiglu"
+  dropout: 0.1
+  bias: true
+  initializer: "normal"
+  init_range: 0.02
+  init_std: 0.02
+  device: "auto"
+
+layernorm:
+  d_model: 768
+  eps: 0.00001
+  elementwise_affine: true
+  bias: true
+  device: "auto"
+
 dataset:
+  dataset_name: "tiny_shakespeare"
   dataset_dir: "data"
+  source_type: "text"  # Choices: "text", "folder", "multi_file", "streaming"
+  file_pattern: "*.txt"
+  encoding: "utf-8"
   train_split: "train"
   val_split: "validation"
   test_split: "test"
+  validation:
+    min_char_count: 10
+    max_non_printable_ratio: 0.1
+    check_utf8: true
+    check_duplicates: true
+    max_file_size_mb: 1024.0
+  split:
+    train_ratio: 0.8
+    val_ratio: 0.1
+    test_ratio: 0.1
+    seed: 42
+    shuffle: true
+  batch:
+    batch_size: 16
+    drop_last: false
+    pad_token_id: 0
+    shuffle: true
+    pin_memory: true
+    num_workers: 0
+  sequence:
+    window_size: 64
+    stride: 64
+    add_bos: true
+    add_eos: true
+  cache:
+    enabled: true
+    cache_dir: "data/cache"
+    compress: false
 
 training:
   batch_size: 16
