@@ -82,19 +82,25 @@ class AttentionMask:
                 f"attention_scores must be 2D (T, T), 3D (B, T, T), or 4D (B, H, T, T), got shape {tuple(attention_scores.shape)}"
             )
 
-        seq_len = attention_scores.size(-1)
-        causal_m = cls.create_causal_mask(
-            sequence_length=seq_len,
-            device=attention_scores.device,
-            dtype=attention_scores.dtype,
-        )
+        t_q = attention_scores.size(-2)
+        t_k = attention_scores.size(-1)
 
-        if attention_scores.ndim == 3 and causal_m.ndim == 2:
-            causal_m = causal_m.unsqueeze(0)  # (1, T, T)
-        elif attention_scores.ndim == 4 and causal_m.ndim == 2:
-            causal_m = causal_m.unsqueeze(0).unsqueeze(0)  # (1, 1, T, T) for broadcasting over B and H
+        if t_q == t_k:
+            causal_m = cls.create_causal_mask(
+                sequence_length=t_k,
+                device=attention_scores.device,
+                dtype=attention_scores.dtype,
+            )
 
-        masked_scores = attention_scores + causal_m
+            if attention_scores.ndim == 3 and causal_m.ndim == 2:
+                causal_m = causal_m.unsqueeze(0)  # (1, T, T)
+            elif attention_scores.ndim == 4 and causal_m.ndim == 2:
+                causal_m = causal_m.unsqueeze(0).unsqueeze(0)  # (1, 1, T, T)
+
+            masked_scores = attention_scores + causal_m
+        else:
+            # For KV-cache decoding (T_q < T_k), query token attends to all past cached tokens
+            masked_scores = attention_scores
 
         if custom_mask is not None:
             masked_scores = masked_scores + custom_mask

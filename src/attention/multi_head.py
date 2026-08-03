@@ -7,7 +7,7 @@ and output projection matching GPT-2/3, LLaMA, and Mistral standards.
 
 import math
 import logging
-from typing import Optional, Tuple, Union
+from typing import Dict, Optional, Tuple, Union
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -115,15 +115,20 @@ class MultiHeadAttention(nn.Module):
         self,
         x: torch.Tensor,
         mask: Optional[torch.Tensor] = None,
-    ) -> torch.Tensor:
+        kv_cache: Optional[Dict[str, torch.Tensor]] = None,
+        use_cache: bool = False,
+    ) -> Union[torch.Tensor, Tuple[torch.Tensor, Optional[Dict[str, torch.Tensor]]]]:
         """Forward pass computing Multi-Head Causal Self-Attention.
 
         Args:
             x: Input FloatTensor of shape (B, T, d_model) or (T, d_model).
             mask: Optional external mask FloatTensor.
+            kv_cache: Optional dict containing cached 'key' and 'value' tensors.
+            use_cache: If True, returns tuple of (output, new_kv_cache).
 
         Returns:
-            Multi-Head Attention output FloatTensor of shape (B, T, d_model) or (T, d_model).
+            Multi-Head Attention output FloatTensor of shape (B, T, d_model) or (T, d_model),
+            or Tuple of (output, updated_kv_cache).
 
         Raises:
             AttentionValidationError: If input validation checks fail.
@@ -152,6 +157,12 @@ class MultiHeadAttention(nn.Module):
         k = k.view(b_size, seq_len, self.n_heads, self.head_dim).transpose(1, 2)
         v = v.view(b_size, seq_len, self.n_heads, self.head_dim).transpose(1, 2)
 
+        if kv_cache is not None and "key" in kv_cache and "value" in kv_cache:
+            k = torch.cat([kv_cache["key"], k], dim=2)
+            v = torch.cat([kv_cache["value"], v], dim=2)
+
+        new_kv_cache = {"key": k, "value": v} if use_cache else None
+
         # 4. Scaled Dot-Product Attention Scores: (B, H, T, d_head) x (B, H, d_head, T) -> (B, H, T, T)
         scores = torch.matmul(q, k.transpose(-2, -1)) * self.scale
 
@@ -174,7 +185,7 @@ class MultiHeadAttention(nn.Module):
         y = torch.matmul(attn_drop, v)
 
         # 9. Head Concatenation: (B, H, T, d_head) -> (B, T, H, d_head) -> (B, T, d_model)
-        y = y.transpose(1, 2).contiguous().view(b_size, seq_len, self.d_model)
+        y = y.transpose(1, 2).contiguous().view(b_size, -1, self.d_model)
 
         # 10. Output Linear Projection & Residual Dropout
         output = self.resid_dropout(self.c_proj(y))
@@ -182,6 +193,8 @@ class MultiHeadAttention(nn.Module):
         if is_2d:
             output = output.squeeze(0)  # (1, T, d) -> (T, d)
 
+        if use_cache:
+            return output, new_kv_cache
         return output
 
     def extra_repr(self) -> str:
