@@ -1,10 +1,25 @@
-"""Losses Module.
+"""Loss Subsystem Module for Aura LLM Architecture.
 
-WHY THIS MODULE EXISTS:
-    Computes optimization objective losses for language model training. Houses custom loss implementations
-    such as Cross-Entropy Loss with label smoothing, target token masking, and focal loss variants.
-
-HOW FUTURE MODULES WILL PLUG IN:
-    - Phase 13 (Training Loop) & Phase 16 (Fine-Tuning): The trainer calls loss functions from this module
-      to compute scalar loss tensors for backward pass backpropagation (`loss.backward()`).
+Provides CrossEntropyLossConfig, CrossEntropyLoss, LossFactory,
+LossValidator, and LossStatistics.
 """
+
+from src.losses.config import CrossEntropyLossConfig
+from src.losses.cross_entropy import CrossEntropyLoss
+from src.losses.exceptions import LossConfigError, LossError, LossValidationError
+from src.losses.factory import LossFactory
+from src.losses.statistics import LossStats, LossStatistics
+from src.losses.validator import LossValidationResult, LossValidator
+
+__all__ = [
+    "CrossEntropyLossConfig",
+    "CrossEntropyLoss",
+    "LossFactory",
+    "LossValidator",
+    "LossValidationResult",
+    "LossStatistics",
+    "LossStats",
+    "LossError",
+    "LossValidationError",
+    "LossConfigError",
+]
