@@ -1,32 +1,48 @@
-"""Utilities Module.
+"""Utility Module for Aura LLM Architecture.
 
-WHY THIS MODULE EXISTS:
-    Provides infrastructure utilities including hardware device auto-detection (CPU/CUDA/MPS),
-    seed setting for strict scientific determinism, path management, configuration loading,
-    experiment run tracking, and checkpoint serialization.
-
-HOW FUTURE MODULES WILL PLUG IN:
-    - All subsequent phases import `project_paths`, `get_device`, `set_seed`, `load_config`,
-      `CheckpointManager`, and `ExperimentManager` to maintain consistent runtime infrastructure.
+Provides CheckpointConfig, LifecycleConfig, CheckpointManager, LifecycleManager,
+CheckpointSaver, CheckpointLoader, CheckpointValidator, CheckpointMetadata, MetadataRegistry,
+CheckpointExporter, ModelExporter, TrainingResumeManager, and CheckpointStatistics.
 """
 
 from src.utils.checkpoint import CheckpointManager
+from src.utils.checkpoint_config import CheckpointConfig, LifecycleConfig
+from src.utils.checkpoint_exporter import CheckpointExporter, ModelExporter
+from src.utils.checkpoint_loader import CheckpointLoader
+from src.utils.checkpoint_metadata import CheckpointMetadata, MetadataRegistry
+from src.utils.checkpoint_saver import CheckpointSaver
+from src.utils.checkpoint_statistics import CheckpointStats, CheckpointStatistics
+from src.utils.checkpoint_validator import CheckpointValidationResult, CheckpointValidator
 from src.utils.config import AppConfig
-from src.utils.config_loader import ConfigLoader, load_config
-from src.utils.device import DeviceManager, get_device
+from src.utils.config_loader import ConfigLoader
+from src.utils.device import DeviceManager
 from src.utils.experiment import ExperimentManager
+from src.utils.lifecycle_manager import LifecycleManager
 from src.utils.paths import PathManager, project_paths
+from src.utils.resume_manager import TrainingResumeManager
 from src.utils.seed import set_seed
 
 __all__ = [
-    "PathManager",
-    "project_paths",
-    "DeviceManager",
-    "get_device",
-    "set_seed",
+    "CheckpointConfig",
+    "LifecycleConfig",
+    "CheckpointManager",
+    "LifecycleManager",
+    "CheckpointSaver",
+    "CheckpointLoader",
+    "CheckpointValidator",
+    "CheckpointValidationResult",
+    "CheckpointMetadata",
+    "MetadataRegistry",
+    "CheckpointExporter",
+    "ModelExporter",
+    "TrainingResumeManager",
+    "CheckpointStatistics",
+    "CheckpointStats",
     "AppConfig",
     "ConfigLoader",
-    "load_config",
+    "DeviceManager",
     "ExperimentManager",
-    "CheckpointManager",
+    "PathManager",
+    "project_paths",
+    "set_seed",
 ]
