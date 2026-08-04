@@ -1,11 +1,33 @@
-"""Optimizers Module.
+"""Optimizers Subsystem Module for Aura LLM Architecture.
 
-WHY THIS MODULE EXISTS:
-    PyTorch parameters require gradient-based updates using optimization algorithms like AdamW.
-    To adhere to first-principles learning, custom optimizers (e.g. AdamW with decoupled weight decay)
-    are implemented directly in PyTorch tensors within this module.
-
-HOW FUTURE MODULES WILL PLUG IN:
-    - Phase 13 (Training Loop): Trainer instantiates optimizers from this module, separating parameters
-      that receive weight decay (weights) from parameters that do not (biases, LayerNorm weights).
+Provides OptimizerConfig, OptimizationConfig, OptimizerFactory,
+GradientManager, OptimizationManager, WeightDecayUtilities, CheckpointUtilities,
+OptimizationStatistics, and OptimizationStats.
 """
+
+from src.optimizers.config import OptimizationConfig, OptimizerConfig
+from src.optimizers.exceptions import (
+    OptimizerConfigError,
+    OptimizerError,
+    OptimizerValidationError,
+)
+from src.optimizers.factory import OptimizerFactory
+from src.optimizers.gradient_manager import GradientManager
+from src.optimizers.manager import OptimizationManager
+from src.optimizers.statistics import OptimizationStats, OptimizationStatistics
+from src.optimizers.utilities import CheckpointUtilities, WeightDecayUtilities
+
+__all__ = [
+    "OptimizerConfig",
+    "OptimizationConfig",
+    "OptimizerFactory",
+    "GradientManager",
+    "OptimizationManager",
+    "WeightDecayUtilities",
+    "CheckpointUtilities",
+    "OptimizationStatistics",
+    "OptimizationStats",
+    "OptimizerError",
+    "OptimizerValidationError",
+    "OptimizerConfigError",
+]
