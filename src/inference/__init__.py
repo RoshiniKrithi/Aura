@@ -1,11 +1,46 @@
-"""Inference Module.
+"""Inference Subsystem Module for Aura LLM Architecture.
 
-WHY THIS MODULE EXISTS:
-    Executes efficient autoregressive text generation from trained model weights. Includes
-    Key-Value (KV) caching to avoid redundant attention recalculations, along with decoding strategies
-    (Greedy, Top-k, Top-p / Nucleus sampling, Temperature scaling, Repetition Penalty).
-
-HOW FUTURE MODULES WILL PLUG IN:
-    - Phase 14: Will implement `Generator` class, `KVCache` optimization, and sampling algorithms.
-    - Phase 18 (Deployment): API backends and interactive CLI scripts will use `Generator` from this module.
+Provides InferenceConfig, InferenceEngine, BaseSamplingStrategy, GreedyStrategy,
+TemperatureStrategy, TopKStrategy, TopPStrategy, CompositeSamplingStrategy,
+InferenceFactory, InferenceValidator, InferenceUtilities, and InferenceStatistics.
 """
+
+from src.inference.config import InferenceConfig
+from src.inference.engine import InferenceEngine
+from src.inference.exceptions import (
+    InferenceConfigError,
+    InferenceError,
+    InferenceValidationError,
+)
+from src.inference.factory import InferenceFactory
+from src.inference.statistics import InferenceStats, InferenceStatistics
+from src.inference.strategies import (
+    BaseSamplingStrategy,
+    CompositeSamplingStrategy,
+    GreedyStrategy,
+    TemperatureStrategy,
+    TopKStrategy,
+    TopPStrategy,
+)
+from src.inference.utilities import InferenceUtilities
+from src.inference.validator import InferenceValidationResult, InferenceValidator
+
+__all__ = [
+    "InferenceConfig",
+    "InferenceEngine",
+    "BaseSamplingStrategy",
+    "GreedyStrategy",
+    "TemperatureStrategy",
+    "TopKStrategy",
+    "TopPStrategy",
+    "CompositeSamplingStrategy",
+    "InferenceFactory",
+    "InferenceValidator",
+    "InferenceValidationResult",
+    "InferenceUtilities",
+    "InferenceStatistics",
+    "InferenceStats",
+    "InferenceError",
+    "InferenceValidationError",
+    "InferenceConfigError",
+]
