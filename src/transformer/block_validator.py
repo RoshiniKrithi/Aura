@@ -1,4 +1,4 @@
- """Transformer Block Input and Parameter Validator for Aura LLM Architecture.
+"""Transformer Block Input and Parameter Validator for Aura LLM Architecture.
 
 Enforces 2D/3D tensor shape constraints, feature dimension matching d_model,
 causal mask shape checking, and numerical stability detection (NaN / Inf).
