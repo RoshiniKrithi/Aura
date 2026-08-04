@@ -31,6 +31,9 @@ from src.datasets.reader import (
 from src.datasets.sequence_builder import SequenceBuilder
 from src.datasets.splitter import DatasetSplitter
 from src.datasets.statistics import CorpusStats, DatasetStatistics
+from src.datasets.binary_writer import BinaryDatasetWriter
+from src.datasets.code_cleaner import CodeTextCleaner
+from src.datasets.memmap_dataset import MemmapCodeDataset
 from src.datasets.streaming_dataset import AuraStreamingDataset
 from src.datasets.text_cleaner import TextCleaner
 from src.datasets.text_dataset import AuraTextDataset
@@ -46,6 +49,9 @@ __all__ = [
     "FolderDatasetReader",
     "StreamingReader",
     "TextCleaner",
+    "CodeTextCleaner",
+    "BinaryDatasetWriter",
+    "MemmapCodeDataset",
     "DatasetValidator",
     "ValidationResult",
     "DatasetStatistics",

@@ -22,9 +22,13 @@ from src.tokenizer.char_tokenizer import CharacterTokenizer
 from src.tokenizer.exceptions import TokenizerError, VocabularyError
 from src.tokenizer.vocab import SpecialTokens, Vocabulary
 
+from src.tokenizer.code_bpe_tokenizer import CodeBPESpecialTokens, CodeBPETokenizer
+
 __all__ = [
     "CharacterTokenizer",
     "BPETokenizer",
+    "CodeBPETokenizer",
+    "CodeBPESpecialTokens",
     "BPETrainer",
     "Vocabulary",
     "BPEVocab",
