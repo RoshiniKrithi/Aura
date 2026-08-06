@@ -164,7 +164,7 @@ class BPETokenizer:
         for tid in token_ids:
             if skip_special_tokens and tid in special_ids:
                 continue
-            subwords.append(self.vocab.get_token(tid))
+            subwords.append(self.vocab.id2token.get(tid, self.vocab.special_tokens.unk_token))
 
         return "".join(subwords)
 
