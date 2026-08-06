@@ -583,6 +583,9 @@ class ProgrammingPretrainingRunner:
                 name="TrainMemmap",
             )
 
+        if not val_shards:
+            val_shards = train_shards
+
         val_ds = MemmapCodeDataset(
             shard_paths=val_shards,
             sequence_length=self.config.max_sequence_length,

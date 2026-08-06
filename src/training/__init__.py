@@ -1,7 +1,8 @@
 """Training Engine Subsystem Module for Aura LLM Architecture.
 
 Provides TrainingEngineConfig, TrainingEngine, EpochRunner, BatchRunner, ValidationRunner,
-MetricsManager, ProgressTracker, TrainingLogger, TrainingStatistics, EngineFactory, EngineValidator, and EngineUtilities.
+MetricsManager, ProgressTracker, TrainingLogger, TrainingStatistics, EngineFactory, EngineValidator,
+ProgrammingPretrainingRunner, and InstructionTuningRunner.
 """
 
 from src.training.config import TrainingEngineConfig
@@ -43,6 +44,14 @@ from src.training.exp_003_orchestrator import (
     SequencePacker,
 )
 
+from src.training.exp_004_orchestrator import (
+    InstructionEvaluator,
+    InstructionMetrics,
+    InstructionTrainer,
+    InstructionTuningConfig,
+    InstructionTuningRunner,
+)
+
 __all__ = [
     "TrainingEngineConfig",
     "TrainingEngine",
@@ -80,5 +89,9 @@ __all__ = [
     "SequencePacker",
     "ExperimentTracker",
     "EvaluationManager",
+    "InstructionTuningConfig",
+    "InstructionTuningRunner",
+    "InstructionTrainer",
+    "InstructionEvaluator",
+    "InstructionMetrics",
 ]
-
