@@ -55,8 +55,13 @@ class AttentionMask:
             torch.ones((sequence_length, sequence_length), dtype=torch.bool, device=target_device)
         )
 
-        # 2. Fill allowed positions with 0.0, forbidden positions with -1e9 (or -inf)
-        fill_val = -1e9 if dtype in (torch.float16, torch.bfloat16) else float("-inf")
+        # 2. Fill allowed positions with 0.0, forbidden positions with finite negative value
+        if dtype == torch.float16:
+            fill_val = -65000.0
+        elif dtype == torch.bfloat16:
+            fill_val = -1e9
+        else:
+            fill_val = float("-inf")
         mask = torch.zeros((sequence_length, sequence_length), dtype=dtype, device=target_device)
         mask.masked_fill_(~tril_bool, fill_val)
 
