@@ -32,6 +32,17 @@ from src.training.exp_001 import (
     ValidationSession,
 )
 
+from src.training.exp_003_orchestrator import (
+    CurriculumScheduler,
+    DatasetMixer,
+    DynamicBatchBuilder,
+    EvaluationManager,
+    ExperimentTracker,
+    ProgrammingPretrainingConfig,
+    ProgrammingPretrainingRunner,
+    SequencePacker,
+)
+
 __all__ = [
     "TrainingEngineConfig",
     "TrainingEngine",
@@ -61,5 +72,13 @@ __all__ = [
     "TensorBoardLogger",
     "SampleGenerator",
     "ExperimentStatistics",
+    "ProgrammingPretrainingConfig",
+    "ProgrammingPretrainingRunner",
+    "DatasetMixer",
+    "CurriculumScheduler",
+    "DynamicBatchBuilder",
+    "SequencePacker",
+    "ExperimentTracker",
+    "EvaluationManager",
 ]
 
