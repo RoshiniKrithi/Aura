@@ -69,6 +69,12 @@ class CodeBPETokenizer(BPETokenizer):
         vocab = BPEVocab.load(vocab_file=vocab_file, merges_file=merges_file)
         return cls(vocab=vocab)
 
+    @classmethod
+    def create_default(cls) -> "CodeBPETokenizer":
+        """Constructs a default CodeBPETokenizer with standard byte-level vocabulary."""
+        vocab = BPEVocab()
+        return cls(vocab=vocab)
+
     def encode_code(
         self,
         code_str: str,
