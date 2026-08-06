@@ -1,11 +1,54 @@
-"""Evaluation Module.
+"""Evaluation Module for Aura LLM Architecture.
 
-WHY THIS MODULE EXISTS:
-    Evaluates model capabilities across standard code generation benchmarks (HumanEval, MBPP)
-    and custom DSA problem-solving benchmarks. Includes sandboxed Python execution for code correctness tests
-    and Perplexity evaluation metrics.
-
-HOW FUTURE MODULES WILL PLUG IN:
-    - Phase 17: Will implement `CodeExecutionSandbox`, `PassAtKMetric`, and `PerplexityEvaluator`.
-    - Integrates with `src/inference/` to generate candidate solutions and test against automated unit test suites.
+Provides CodeExecutionSandbox, ExecutionResult, PassAtKEstimator, BenchmarkProblem,
+BenchmarkLoader, BenchmarkRegistry, EvaluationBenchmarkConfig, BenchmarkSuiteRunner,
+and LeaderboardGenerator.
 """
+
+from src.evaluation.benchmark_datasets import (
+    APPSLoader,
+    BaseBenchmarkLoader,
+    BenchmarkLoader,
+    BenchmarkProblem,
+    BenchmarkRegistry,
+    CustomBenchmarkLoader,
+    HumanEvalLoader,
+    MBPPLoader,
+)
+from src.evaluation.benchmark_runner import (
+    BenchmarkExecutor,
+    BenchmarkSuiteRunner,
+    CodeExtractor,
+    EvaluationBenchmarkConfig,
+    LeaderboardGenerator,
+)
+from src.evaluation.code_sandbox import (
+    CodeCompiler,
+    CodeExecutionSandbox,
+    ExecutionResult,
+    SandboxManager,
+    TestCaseRunner,
+)
+from src.evaluation.pass_at_k import PassAtKEstimator
+
+__all__ = [
+    "CodeExecutionSandbox",
+    "ExecutionResult",
+    "CodeCompiler",
+    "SandboxManager",
+    "TestCaseRunner",
+    "PassAtKEstimator",
+    "BenchmarkProblem",
+    "BaseBenchmarkLoader",
+    "HumanEvalLoader",
+    "MBPPLoader",
+    "APPSLoader",
+    "CustomBenchmarkLoader",
+    "BenchmarkRegistry",
+    "BenchmarkLoader",
+    "EvaluationBenchmarkConfig",
+    "CodeExtractor",
+    "BenchmarkExecutor",
+    "LeaderboardGenerator",
+    "BenchmarkSuiteRunner",
+]
